@@ -27,7 +27,10 @@ app.get('/', (req, res) => {
 });
 
 // Database Connection and Server Start
-const startServer = async () => {
+const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) {
+        return;
+    }
     try {
         console.log('Attempting to connect to MongoDB at:', process.env.MONGO_URI);
         // Force IPv4, disable buffering, and enable debug logs
@@ -37,22 +40,28 @@ const startServer = async () => {
         });
         console.log('MongoDB Connected');
         console.log('Connection State:', mongoose.connection.readyState);
-
-        // Monitor connection events
-        mongoose.connection.on('error', err => {
-            console.error('Mongoose connection error:', err);
-        });
-        mongoose.connection.on('disconnected', () => {
-            console.log('Mongoose disconnected');
-        });
-
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
     } catch (err) {
         console.error('MongoDB Connection Error:', err);
-        process.exit(1);
     }
 };
 
-startServer();
+// Connect to DB immediately
+connectDB();
+
+// Monitor connection events
+mongoose.connection.on('error', err => {
+    console.error('Mongoose connection error:', err);
+});
+mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected');
+});
+
+// Export the app for Vercel
+module.exports = app;
+
+// Only listen if running directly (dev mode)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}

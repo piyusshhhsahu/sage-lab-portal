@@ -27,8 +27,8 @@ const Dashboard = () => {
             try {
                 const token = localStorage.getItem('token');
                 const [subjectsRes, submissionsRes] = await Promise.all([
-                    axios.get(`http://localhost:8080/api/subjects?year=${user.year}&semester=${user.semester}`),
-                    axios.get('http://localhost:8080/api/submissions', { headers: { Authorization: `Bearer ${token}` } })
+                    axios.get(`${import.meta.env.VITE_API_URL}/subjects?year=${user.year}&semester=${user.semester}`),
+                    axios.get(`${import.meta.env.VITE_API_URL}/submissions`, { headers: { Authorization: `Bearer ${token}` } })
                 ]);
                 setSubjects(subjectsRes.data);
                 setSubmissions(submissionsRes.data);
@@ -65,7 +65,7 @@ const Dashboard = () => {
             e.preventDefault();
             try {
                 const token = localStorage.getItem('token');
-                await axios.post('http://localhost:8080/api/subjects', subData, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/subjects`, subData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 alert('Subject Added');

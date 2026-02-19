@@ -12,7 +12,7 @@ const SubmissionList = ({ refreshTrigger }) => {
     const fetchSubmissions = async () => {
         try {
             const token = localStorage.getItem('token');
-            const { data } = await axios.get('http://localhost:8080/api/submissions', {
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submissions`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSubmissions(data);
@@ -28,7 +28,7 @@ const SubmissionList = ({ refreshTrigger }) => {
     const handleStatusUpdate = async (id, status, remarks) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:8080/api/submissions/${id}`, { status, remarks }, {
+            await axios.put(`${import.meta.env.VITE_API_URL}/submissions/${id}`, { status, remarks }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchSubmissions();
@@ -133,7 +133,7 @@ const SubmissionList = ({ refreshTrigger }) => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-no-wrap text-sm">
                                     <a
-                                        href={`http://localhost:8080/${sub.fileUrl}`}
+                                        href={`${import.meta.env.VITE_API_URL.replace('/api', '')}/${sub.fileUrl}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-50  dark:bg-brand-500/20 text-brand-600 dark:text-brand-300 border border-brand-200 dark:border-brand-500/30 hover:bg-brand-100 dark:hover:bg-brand-500/30 transition-colors"

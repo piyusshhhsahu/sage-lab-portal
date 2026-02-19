@@ -30,7 +30,7 @@ const SubmissionForm = ({ onSubmissionSuccess, subjects: propSubjects, initialSu
                 return;
             }
             try {
-                const { data } = await axios.get(`http://127.0.0.1:8080/api/subjects?year=${user.year}&semester=${user.semester}`);
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/subjects?year=${user.year}&semester=${user.semester}`);
                 setSubjects(data);
             } catch (error) {
                 console.error('Error fetching subjects', error);
@@ -91,7 +91,7 @@ const SubmissionForm = ({ onSubmissionSuccess, subjects: propSubjects, initialSu
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:8080/api/submissions', data, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/submissions`, data, {
                 headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
             });
             setMessage('Submission Successful!');
