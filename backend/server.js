@@ -14,9 +14,25 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/subjects', require('./routes/subjectRoutes'));
-app.use('/api/submissions', require('./routes/submissionRoutes'));
+const router = express.Router();
+router.use('/auth', require('./routes/authRoutes'));
+router.use('/subjects', require('./routes/subjectRoutes'));
+router.use('/submissions', require('./routes/submissionRoutes'));
+
+// Health Check
+router.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        dbState: mongoose.connection.readyState,
+        env: {
+            mongo: !!process.env.MONGO_URI
+        }
+    });
+});
+
+// Mount router at both /api and root to handle Vercel rewrites robustly
+app.use('/api', router);
+app.use('/', router);
 
 // Make uploads folder static
 app.use('/uploads', express.static('uploads'));
