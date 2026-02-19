@@ -29,7 +29,10 @@ const Register = () => {
             await register(formData);
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed');
+            console.error('Registration Error:', err);
+            const status = err.response?.status;
+            const msg = err.response?.data?.message || err.message || 'Registration failed';
+            setError(`Error ${status || ''}: ${msg}`);
         } finally {
             setIsLoading(false);
         }

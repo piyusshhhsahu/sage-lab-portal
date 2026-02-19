@@ -26,6 +26,16 @@ app.get('/', (req, res) => {
     res.send('SAGE Lab Manual Submission Portal API is running...');
 });
 
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        dbState: mongoose.connection.readyState,
+        env: {
+            mongo: !!process.env.MONGO_URI
+        }
+    });
+});
+
 // Database Connection and Server Start
 const connectDB = async () => {
     if (mongoose.connection.readyState >= 1) {
