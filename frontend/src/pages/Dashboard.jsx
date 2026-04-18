@@ -5,6 +5,7 @@ import SubmissionForm from '../components/SubmissionForm';
 import SubmissionList from '../components/SubmissionList';
 import AdminStats from '../components/AdminStats';
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 import { FaPlus, FaTimes, FaBook, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 
 const Dashboard = () => {
@@ -30,8 +31,8 @@ const Dashboard = () => {
             try {
                 const token = localStorage.getItem('token');
                 const [subjectsRes, submissionsRes] = await Promise.all([
-                    axios.get(`${import.meta.env.VITE_API_URL}/subjects?year=${user.year}&semester=${user.semester}`),
-                    axios.get(`${import.meta.env.VITE_API_URL}/submissions`, { headers: { Authorization: `Bearer ${token}` } })
+                    axios.get(`${API_BASE_URL}/subjects?year=${user.year}&semester=${user.semester}`),
+                    axios.get(`${API_BASE_URL}/submissions`, { headers: { Authorization: `Bearer ${token}` } })
                 ]);
                 setSubjects(subjectsRes.data);
                 setSubmissions(submissionsRes.data);
@@ -68,7 +69,7 @@ const Dashboard = () => {
             e.preventDefault();
             try {
                 const token = localStorage.getItem('token');
-                await axios.post(`${import.meta.env.VITE_API_URL}/subjects`, subData, {
+                await axios.post(`${API_BASE_URL}/subjects`, subData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 addToast('Subject added successfully.', 'success');

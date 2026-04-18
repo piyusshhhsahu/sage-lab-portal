@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 
 export const AuthContext = createContext();
 
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
+            const { data } = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
             localStorage.setItem('token', data.token);
             setUser(jwtDecode(data.token));
             return data;
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (userData) => {
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, userData);
+            const { data } = await axios.post(`${API_BASE_URL}/auth/register`, userData);
             localStorage.setItem('token', data.token);
             setUser(jwtDecode(data.token));
             return data;

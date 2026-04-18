@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { API_BASE_URL } from '../apiConfig';
 import { FaCloudUploadAlt, FaFilePdf, FaTimes } from 'react-icons/fa';
 
 const SubmissionForm = ({ onSubmissionSuccess, subjects: propSubjects, initialSubjectId, onClose }) => {
@@ -33,7 +34,7 @@ const SubmissionForm = ({ onSubmissionSuccess, subjects: propSubjects, initialSu
                 return;
             }
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/subjects?year=${user.year}&semester=${user.semester}`);
+                const { data } = await axios.get(`${API_BASE_URL}/subjects?year=${user.year}&semester=${user.semester}`);
                 setSubjects(data);
             } catch (error) {
                 console.error('Error fetching subjects', error);
@@ -105,7 +106,7 @@ const SubmissionForm = ({ onSubmissionSuccess, subjects: propSubjects, initialSu
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`${import.meta.env.VITE_API_URL}/submissions`, data, {
+            await axios.post(`${API_BASE_URL}/submissions`, data, {
                 headers: { Authorization: `Bearer ${token}` },
                 onUploadProgress: (progressEvent) => {
                     if (progressEvent.total) {
