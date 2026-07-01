@@ -38,8 +38,9 @@ router.get('/health', (req, res) => {
     });
 });
 
-// Mount router at both /api and root to handle Vercel rewrites robustly
+// Mount router at both /api, /api/index.js and root to handle Vercel rewrites robustly
 app.use('/api', router);
+app.use('/api/index.js', router);
 app.use('/', router);
 
 // Make uploads folder static
